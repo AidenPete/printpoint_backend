@@ -15,8 +15,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from printing import views as printing_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/auth/', include('djoser.urls')),
+    path('api/auth/', include('djoser.urls.jwt')),
+    path('api/documents/', printing_views.DocumentUploadView.as_view(), name='document-upload'),
+    path('api/documents/list/', printing_views.DocumentListView.as_view(), name='document-list'),
+    path('api/print-jobs/', printing_views.PrintJobCreateView.as_view(), name='print-job-create'),
+    path('api/print-jobs/list/', printing_views.PrintJobListView.as_view(), name='print-job-list'),
+    path('api/print-jobs/<int:pk>/', printing_views.PrintJobDetailView.as_view(), name='print-job-detail'),
 ]
